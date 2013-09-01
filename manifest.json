@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name" : "Soundcloud control button",
     "description": "This is Extension allows you to play/pause your SoundCloud stream using button.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "icons" : { 
         "16": "images/play.png",
         "128": "images/play.png"
