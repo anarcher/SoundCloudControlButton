@@ -3,6 +3,10 @@
     var playing = false;
     var $playButton = $("button.playControl")
 
+    //chrome.runtime.sendMessage were introduced in Chrome 28
+    //For compatible with chrome 20-25,use chrome.extension.onMessage
+    var sendMessage = chrome[chrome.runtime && chrome.runtime.sendMessage ? 'runtime' : 'extension' ].sendMessage; 
+
     var watchPlayButton = function() {
         var $this = $(this);
         var _playing = false;
@@ -11,7 +15,7 @@
         }
         if(playing != _playing) {
             playing = _playing;
-            chrome.runtime.sendMessage({action : "click" , "playing" : playing});
+            sendMessage({action : "click" , "playing" : playing});
         }
     };
 
@@ -20,8 +24,10 @@
     var clickPlayButton = function() {
         $playButton.click();
     }
-
-    chrome.runtime.onMessage.addListener(
+    //chrome.runtime.sendMessage were introduced in Chrome 28
+    //For compatible with chrome 20-25,use chrome.extension.onMessage
+    var onMessage = chrome[chrome.runtime && chrome.runtime.onMessage ? 'runtime' : 'extension'].onMessage;
+    onMessage.addListener(
         function(request,sender,sendResponse) {
             if(request.action == "click") {
                 clickPlayButton();

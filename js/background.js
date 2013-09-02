@@ -2,6 +2,7 @@
 (function() {
     var SOUNDCLOUD_URL_P = "https://soundcloud.com/*";
     var playingTabId = null;
+
     chrome.runtime.onInstalled.addListener(function(details) {
         chrome.tabs.query({ url: SOUNDCLOUD_URL_P},function(tabs){ 
             for(var i = 0; i < tabs.length; i++) {
@@ -35,7 +36,11 @@
         });
 
     });
-    chrome.runtime.onMessage.addListener(
+
+    //chrome.runtime.sendMessage were introduced in Chrome 28
+    //For compatible with chrome 20-25,use chrome.extension.onMessage
+    var onMessage = chrome[chrome.runtime && chrome.runtime.onMessage ? 'runtime' : 'extension'].onMessage;
+    onMessage.addListener(
         function(request,sender,sendResponse) {
             if(sender.tab && request.action == "click") {
                 var playing = request.playing;
@@ -48,4 +53,5 @@
                 }
             }
     });
+
 })();
